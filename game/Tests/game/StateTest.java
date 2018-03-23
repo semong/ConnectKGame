@@ -8,6 +8,7 @@ import org.junit.Test;
 public class StateTest {
 	
 	private State classUnderTest;
+	private State classUnderTest2;
 	private GameMove gameMove;
 	private connectkParameters parameters;
 
@@ -21,6 +22,10 @@ public class StateTest {
 		parameters = new connectkParameters(rows,columns,length,gravity,time);
 		classUnderTest = new State(parameters);
 		classUnderTest.board[3][5] = 1 ;
+		
+		classUnderTest2 = new State(parameters);
+        classUnderTest2.board[3][5] = 2 ;
+        
 		classUnderTest.winner = 1;
 		
 		gameMove = GameMove.getInstance(3,5);
