@@ -27,12 +27,6 @@ public class StateTest {
 	}
 
 	@Test
-	public void testApplyGameMoveFail() {
-		classUnderTest.isDone();
-		assertEquals("Game is done", classUnderTest.applyGameMove(gameMove));
-	}
-
-	@Test
 	public void testGetconnectkParameters() {
 		assertEquals(6, classUnderTest.getconnectkParameters().getRows());
 	}
@@ -69,18 +63,8 @@ public class StateTest {
 	}
 
 	@Test
-	public void testGetValidGameMoves() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIterator() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+	  assertEquals(false, classUnderTest.equals(classUnderTest2));
 	}
 
 }
