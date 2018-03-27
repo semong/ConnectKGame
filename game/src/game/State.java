@@ -4,9 +4,9 @@ import java.util.*;
 
 class State implements Iterable<GameMove> {
   private connectkParameters parameters;
-  public int board[][];
+  private int board[][];
   private int marks = 0;
-  public int winner = 0;
+  private int winner = 0;
 
   public State(connectkParameters parameters) {
     assert (parameters != null);
