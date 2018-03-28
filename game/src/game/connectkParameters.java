@@ -14,10 +14,15 @@ class connectkParameters {
   public static final int WIN_LENGTH_MIN = 1;
   public static final int WIN_LENGTH_MAX = 30;
 
+  
   /**
-     * Constructs a new connectkParameters objects from the passed parameters.
-     *
-  */
+   * Constructs a new connectkParameters objects from the passed parameters.
+   * @param rows Number of rows on the board
+   * @param columns Number of columns on the board
+   * @param winLength Number of linked discs required to win
+   * @param gravity Toggle gravity
+   * @param timeLimit Time (in milliseconds) given for the MCTS algorithm to run
+   */
   public connectkParameters(int rows, int columns, int winLength, boolean gravity, long timeLimit) {
     if (rows > ROWS_MAX || rows < ROWS_MIN) {
       throw new IllegalArgumentException("connectkParameters:connectkParameters: "
@@ -39,22 +44,42 @@ class connectkParameters {
     this.timeLimit = timeLimit;
   }
 
+  /**
+   * 
+   * @return Integer number of rows
+   */
   public int getRows() {
     return rows;
   }
 
+  /**
+   * 
+   * @return Integer number of columns
+   */
   public int getColumns() {
     return columns;
   }
 
+  /**
+   * 
+   * @return  Integer number of discs required to be chained to win
+   */
   public int getWinLength() {
     return winLength;
   }
 
+  /**
+   * 
+   * @return Boolean value for gravity
+   */
   public boolean isGravity() {
     return gravity;
   }
   
+  /**
+   * 
+   * @return Long Time in milliseconds given to run simulations of MCTS algorithm.
+   */
   public long getTimeLimit() {
     return timeLimit;
   }

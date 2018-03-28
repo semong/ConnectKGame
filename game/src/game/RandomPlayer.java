@@ -4,13 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * A class implementing a ConnectK player, using Monte Carlo Tree Search without any heuristics.
+ * A class implementing a ConnectK player,  without any heuristics.
  */
 
-/**
- * A class representing a single move in ConnectK or more accurately a position on the board.
- */
- 
  
  class RandomPlayer implements Player {
   private int id;
@@ -29,7 +25,12 @@ import java.util.Random;
     return new RandomPlayer(id, new Random());
   }
 
-  // Constructor
+
+  /**
+   * Constructor
+   * @param id ID of the player
+   * @param random Random number generator
+   */
   protected RandomPlayer(int id, Random random) {
     assert (id == 1 || id == 2);
     assert (random != null);

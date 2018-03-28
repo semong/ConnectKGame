@@ -8,6 +8,10 @@ class State implements Iterable<GameMove> {
   private int marks = 0;
   private int winner = 0;
 
+  /**
+   * Constructor
+   * @param parameters Parameters for the game (rows, columns, winLength, gravity and time limit)
+   */
   public State(connectkParameters parameters) {
     assert (parameters != null);
 
@@ -15,6 +19,11 @@ class State implements Iterable<GameMove> {
     this.board = new int[parameters.getRows()][parameters.getColumns()];
   }
 
+  /**
+   * Applies the given GameMove
+   * @param move The desired move
+   * @return State with the updated board
+   */
   public State applyGameMove(GameMove move) {
     if (isDone()) {
       throw new IllegalStateException("State::applyGameMove: Game is done.");
@@ -39,20 +48,38 @@ class State implements Iterable<GameMove> {
     return newState;
   }
 
+  /**
+   * Getter for connectkParameters
+   * @return Parameters (rows, columns, winLength, gravity and time limit)
+   */
   public connectkParameters getconnectkParameters() {
     return parameters;
   }
 
+  /**
+   * Return ID of the current player.
+   * @return Integer ID of the current player.
+   */
   public int getCurrentPlayer() {
     return marks % 2 + 1;
   }
 
+  /**
+   * 
+   * @param move GameMove object that represents the player's position.
+   * @return Player ID.
+   */
   public int getPlayerAt(GameMove move) {
-    assert (move != null);
+    assert (move != null);  
 
     return board[move.getRow()][move.getColumn()];
   }
 
+  /**
+   * Checks if a spot is already filled on the board.
+   * @param move GameMove object that represents the position.
+   * @return True if the position specified is already filled.
+   */
   public boolean isOnBoard(GameMove move) {
     assert (move != null);
 
@@ -61,12 +88,21 @@ class State implements Iterable<GameMove> {
     return  isValidRow && isValidColumn;
   }
 
+  /**
+   * Checks if a spot on the board is empty (available).
+   * @param move GameMove object that represents the position.
+   * @return True if the position specified is empty.
+   */
   public boolean isAvailable(GameMove move) {
     assert (move != null);
 
     return getPlayerAt(move) == 0;
   }
 
+  /**
+   * Returns the winning player's ID once the game has finished.
+   * @return Returns the Integer ID of the winning player.
+   */
   public int getWinner() {
     if (!isDone()) {
       throw new IllegalStateException("State::getWinner: The game is not done.");
@@ -74,10 +110,18 @@ class State implements Iterable<GameMove> {
     return winner;
   }
 
+  /**
+   * Checks if the game has finished.
+   * @return True if the game has finished.
+   */
   public boolean isDone() {
     return marks == parameters.getRows() * parameters.getColumns() || winner > 0;
   }
 
+  /**
+   * This method returns a list of valid moves which lie on the board. 
+   * @return List of GameMoves that are valid.
+   */
   public List<GameMove> getValidGameMoves() {
     List<GameMove> moves = new ArrayList<>();
     for (GameMove move : this) {
@@ -120,6 +164,11 @@ class State implements Iterable<GameMove> {
     };
   }
 
+  /**
+   * Applies gravity so the discs fall to the available bottom-most row.
+   * @param move GameMove object that represents the position.
+   * @return A new GameMove object with the disc at the bottom of the column.
+   */
   private GameMove applyGravity(GameMove move) {
     assert (move != null);
 
@@ -135,7 +184,10 @@ class State implements Iterable<GameMove> {
     return move;
   }
 
-  // Copy constructor
+  /**
+   * Second constructor
+   * @param other Create a state from this state
+   */
   private State(State other) {
     this(other.parameters);
     for (int row = 0; row < parameters.getRows(); row++) {
@@ -144,7 +196,12 @@ class State implements Iterable<GameMove> {
     marks = other.marks;
   }
 
-  // Setter for the player at given position.
+
+  /**
+   * Setter for the player at given position.
+   * @param move GameMove object that represents the position.
+   * @param player player's ID
+   */
   private void setPlayerAt(GameMove move, int player) {
     assert (move != null);
     assert (isOnBoard(move));
@@ -154,6 +211,12 @@ class State implements Iterable<GameMove> {
     board[move.getRow()][move.getColumn()] = player;
   }
 
+  /**
+   * Checks the 4 possible directions of the connected discs to determine a winner.
+   * @param move GameMove object that represents the position.
+   * @return Returns true if winLength number of a player's discs 
+   * are connected in any of the 4 directions. 
+   */
   private boolean updateWinner(GameMove move) {
     assert (move != null);
     assert (isOnBoard(move));
@@ -167,6 +230,14 @@ class State implements Iterable<GameMove> {
     return vertical || horizontal || positiveDiagonal || negativeDiagonal;
   }
 
+  /**
+   * Checks the direction of the line to determine the winner.
+   * @param move GameMove object that represents the position.
+   * @param row x-axis direction.
+   * @param columnDirection y-axis direction.
+   * @return Returns true if the length of the disc chain matches .
+   * the required winLength in any direction. 
+   */
   private boolean updateWinner(GameMove move, int rowDirection, int columnDirection) {
     assert (move != null);
     assert (isOnBoard(move));
@@ -188,14 +259,21 @@ class State implements Iterable<GameMove> {
     }
     return updateWinner(line, getPlayerAt(move));
   }
-
+  
+  
+  /**
+ * Updates the winner ID according to the line and the owner of the line.
+ * @param line List of integer values representing the line.
+ * @param player Integer ID of the player.
+ * @return True if the length of the disc chain matches the required winLength.
+ */
   private boolean updateWinner(List<Integer> line, int player) {
     assert (player == 1 || player == 2);
 
     int winLength = parameters.getWinLength();
     int chainLength = 0;
-    for (int e : line) {
-      if (e == player) {
+    for (int currentPlayer : line) {
+      if (currentPlayer == player) {
         chainLength++;
         if (chainLength == winLength) {
           return true;

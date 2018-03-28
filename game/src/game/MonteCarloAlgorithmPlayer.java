@@ -31,7 +31,12 @@ class MonteCarloAlgorithmPlayer implements Player {
     return new MonteCarloAlgorithmPlayer(id, new Random());
   }
 
-  // Constructor
+  
+  /**
+   * Constructor
+   * @param id Player ID
+   * @param random Random number generator
+   */
   protected MonteCarloAlgorithmPlayer(int id, Random random) {
     assert (id == 1 || id == 2);
     assert (random != null);
@@ -40,20 +45,29 @@ class MonteCarloAlgorithmPlayer implements Player {
     this.random = random;
   }
 
+  /**
+   * Getter for ID
+   */
   @Override
   public int getId() {
     return id;
   }
 
+  /**
+   * Chooses the best game move after running MCTS simulation for specified length of time.
+   * @param state Current state
+   */
   @Override
   public void calculateMove(State state) {
     assert (state != null);
     assert (!state.isDone());
+    //int count = 0;           //uncomment to check number of iterations
 
     // Run simulations while time remains.
     long stopTime = System.nanoTime() + state.getconnectkParameters().getTimeLimit() * 1000000;
     while (stopTime > System.nanoTime()) {
       runSimulation(state, true);
+      //count++;              //uncomment to check number of iterations
     }
 
     // Choose move with highest relative win rate based on simulations.
@@ -71,10 +85,15 @@ class MonteCarloAlgorithmPlayer implements Player {
     }
 
     chosenGameMove = bestGameMove;
+    //System.out.println("Number of iterations: "+ count);       
+    //uncomment ^ to check number of iterations
 
     assert (chosenGameMove != null);
   }
 
+  /**
+   * Returns the chosen best move.
+   */
   @Override
   public GameMove getMove() {
     assert (chosenGameMove != null);
@@ -87,7 +106,13 @@ class MonteCarloAlgorithmPlayer implements Player {
     return "Monte Carlo Tree Search";
   }
 
-  // Run a single simulation
+ 
+  /**
+   * Runs a single simulation
+   * @param state The current state
+   * @param record If node visited before, sets this boolean to true
+   * @return Returns the best game move for the simulation
+   */
   private int runSimulation(State state, boolean record) {
     assert (state != null);
 
@@ -129,14 +154,14 @@ class MonteCarloAlgorithmPlayer implements Player {
     }
 
     // If all moves have been previously taken, return the best move based on UCB.
-    double reward = 0.0;
+    double numberOfPlays = 0.0;
     for (GameMove move : moves) {
-      reward += plays.get(state.applyGameMove(move));
+      numberOfPlays += plays.get(state.applyGameMove(move));
     }
     GameMove bestGameMove = null;
     double bestScore = Double.NEGATIVE_INFINITY;
     for (GameMove move : moves) {
-      double score = calculateScore(state.applyGameMove(move), reward);
+      double score = calculateScore(state.applyGameMove(move), numberOfPlays);
       if (score > bestScore) {
         bestScore = score;
         bestGameMove = move;
@@ -148,13 +173,19 @@ class MonteCarloAlgorithmPlayer implements Player {
     return bestGameMove;
   }
 
-  // Calculate the score of a move based on the UCB formula.
-  private double calculateScore(State state, double reward) {
+
+  /**
+   * Calculate the score of a move based on the UCB formula.
+   * @param state Current state
+   * @param numberOfPlays
+   * @return Reward received
+   */
+  private double calculateScore(State state, double numberOfPlays) {
     assert (state != null);
 
-    double balance = 1.5;
+    double balance = 2;
     return wins.get(state) / plays.get(state) + balance 
-        * Math.sqrt(Math.log(reward) / plays.get(state));
+        * Math.sqrt(Math.log(numberOfPlays) / plays.get(state));
   }
 
   // Records the result of a simulation.
@@ -176,5 +207,3 @@ class MonteCarloAlgorithmPlayer implements Player {
     return null;
   }
 }
-
-

@@ -24,7 +24,11 @@ class Heuristic {
     }
   }
 
-  // Computes the player's winning lines.
+  /**
+   * Computes the player's winning lines.
+   * @param state current state
+   * @return Integer array of the winning lines
+   */
   private int[] winningLines(State state) {
     assert (state != null);
 
@@ -51,7 +55,12 @@ class Heuristic {
     return playerLines;
   }
 
-  // For a given line count computes the owner of the line.
+
+  /**
+   * For a given line count computes the owner of the line.
+   * @param playerCount Array with players
+   * @return ID of the player whose line it is
+   */
   private int lineOwner(int[] playerCount) {
     assert (playerCount != null);
     assert (playerCount.length == 3);
@@ -65,8 +74,16 @@ class Heuristic {
     return owner;
   }
 
-  // For a given line (specified by a starting move and direction) 
-  //count how many pieces each player has in the line.
+  
+  /**
+   * For a given line (specified by a starting move and direction)
+   * counts how many pieces each player has in the line.
+   * @param state the current state
+   * @param move the move
+   * @param rowDirection left or right
+   * @param columnDirection up or down
+   * @return Integer Array containing how many number of pieces ear player has in line.
+   */
   private int[] countPlayersInLine(State state, GameMove move, 
       int rowDirection, int columnDirection) {
     assert (state != null);

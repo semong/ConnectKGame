@@ -14,7 +14,11 @@ class GameMove {
     return new GameMove(row, column);
   }
 
-  // Constructor
+  /**
+   * Constructor
+   * @param row the row
+   * @param column the column
+   */
   protected GameMove(int row, int column) {
     this.row = row;
     this.column = column;
