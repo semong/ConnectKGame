@@ -58,7 +58,6 @@ public class StateTest {
 	}
 
 	@Test
-	//To test- set State.winner to public
 	public void testGetWinner() {
 		assertEquals(1, classUnderTest.getWinner());
 	}
